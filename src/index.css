@@ -1,0 +1,23 @@
+.piano-roll-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto;
+    height: 100%;
+    width: 100%;
+    gap: 1%;
+}
+
+.note {
+    border-style: solid;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    border-style: solid;
+}
+
+.note:active {
+    background-color: lightcoral;
+}
+
+.highlight-when-pressed {
+    background-color: lightcoral;
+}
