@@ -8,7 +8,10 @@ function DrumPad(props) {
   const samples_map = {
         C3: '/audio/kicks/kick_1.wav',
         D3: '/audio/kicks/kick_2.wav',
-        E3: '/audio/snares/atlanta_snare.wav'
+        E3: '/audio/snares/atlanta_snare.wav',
+        F3: '/audio/snares/clean_snare_nola_bounce.wav',
+        G3: '/audio/percs/perc.wav',
+        B3: '/audio/hihats/tight_hat.wav'
   }
 
  const playNote =(note)=> {
@@ -23,9 +26,12 @@ function DrumPad(props) {
 
   const handleKeyDown =(event)=>{
     const map = {
-      "a": "C3",
-      "s": "D3",
-      "d": "E3"
+      "q": "C3",
+      "w": "D3",
+      "e": "E3",
+      'a': "F3",
+      's': "G3",
+      'd': "B3"
     }
     playNote(map[event.key])
   }
@@ -64,22 +70,22 @@ function DrumPad(props) {
           Snare 1
         </button>
         <button className="drum-pad-element"
-          onMouseDown={()=>playNote("E3")} 
+          onMouseDown={()=>playNote("F3")} 
           onMouseUp={()=>stopNote()}
         >
-          Snare 1
+          Snare 2
         </button>
         <button className="drum-pad-element"
-          onMouseDown={()=>playNote("E3")} 
+          onMouseDown={()=>playNote("G3")} 
           onMouseUp={()=>stopNote()}
         >
-          Snare 1
+          perc 1
         </button>
         <button className="drum-pad-element"
-          onMouseDown={()=>playNote("E3")} 
+          onMouseDown={()=>playNote("B3")} 
           onMouseUp={()=>stopNote()}
         >
-          Snare 1
+          hi hat
         </button>
 
         <Song isPlaying={playing} bpm={90}>
