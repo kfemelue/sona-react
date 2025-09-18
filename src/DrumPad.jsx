@@ -41,7 +41,7 @@ function DrumPad(props) {
 
   return (
     <div>
-      <div ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
+      <div className="drum-pad-container" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
         <button className="drum-pad-element"
           onMouseDown={()=>playNote("C3")} 
           onMouseUp={()=>stopNote()}
@@ -57,6 +57,24 @@ function DrumPad(props) {
           Kick 2
         </button>
 
+        <button className="drum-pad-element"
+          onMouseDown={()=>playNote("E3")} 
+          onMouseUp={()=>stopNote()}
+        >
+          Snare 1
+        </button>
+        <button className="drum-pad-element"
+          onMouseDown={()=>playNote("E3")} 
+          onMouseUp={()=>stopNote()}
+        >
+          Snare 1
+        </button>
+        <button className="drum-pad-element"
+          onMouseDown={()=>playNote("E3")} 
+          onMouseUp={()=>stopNote()}
+        >
+          Snare 1
+        </button>
         <button className="drum-pad-element"
           onMouseDown={()=>playNote("E3")} 
           onMouseUp={()=>stopNote()}

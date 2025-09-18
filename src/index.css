@@ -6,6 +6,15 @@
     gap: 1%;
 }
 
+.drum-pad-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto;
+    height: 100%;
+    width: 100%;
+    gap: 1%;
+}
+
 .note {
     border-style: solid;
     text-align: center;
@@ -25,7 +34,7 @@
 .drum-pad-element{
     width: 150px;
     height: 150px;
-    border-radius: 100%;
+    border-radius: 10%;
     background-color: beige;
     border-style: solid;
 }
