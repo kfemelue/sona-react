@@ -3,6 +3,7 @@ import { Song, Track, Instrument, Effect} from 'reactronica';
 
 function Synth(){
     // synth with piano roll
+    // to do: menus to set: synth type, envelope, 
     const divRef = useRef(null);
     const [waveType, setWaveType] = useState("square");
     const [notes, setNotes] = useState(null);
@@ -81,7 +82,7 @@ function Synth(){
                     </div>
                 </div>
 
-                <Song>
+                <Song isPlaying={playing}>
                     <Track>
                         <Instrument 
                             notes ={notes}
