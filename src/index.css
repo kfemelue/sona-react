@@ -1,9 +1,14 @@
-.piano-roll-container {
+/* .piano-roll-container {
     display: grid;
     grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto;
     height: 100%;
     width: 100%;
     gap: 1%;
+} */
+
+.big-box {
+    width: 500px;
+    height: 500px
 }
 
 .drum-pad-container {
@@ -13,6 +18,59 @@
     height: 100%;
     width: 100%;
     gap: 1%;
+}
+
+.piano-keys-container {
+    display: grid;
+    grid-template-rows: auto auto;
+    height: 100%;
+    width: 100%;
+    gap: 1%;
+}
+
+.piano-keys-row-white{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto;
+    height: 100%;
+    width: 100%;
+    gap: 1%;
+}
+
+.piano-keys-row-black {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    height: 80%;
+    width: 100%;
+    gap: 1%;
+}
+
+
+
+.piano-key-white {
+    border-style: solid;
+    text-align: center;
+    width: 50%;
+    height: 100%;
+    border-style: solid;
+}
+
+.piano-key-black {
+    color: white;
+    background-color: black;
+    border-style: solid;
+    text-align: center;
+    width: 30%;
+    height: 100%;
+    border-style: solid;
+}
+
+.piano-key-white:active {
+    background-color: lightcoral;
+}
+
+
+.piano-key-black:active {
+    background-color: lightcoral;
 }
 
 .note {
