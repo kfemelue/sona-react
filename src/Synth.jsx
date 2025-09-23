@@ -29,20 +29,20 @@ function Synth(){
         }
     )
 
-    const qwertyNoteMap = {
-      "a": "C3",
-      "w": "C#3",
-      "s": "D3",
-      "e": "D#3",
-      "d": "E3",
-      "f": "F3",
-      "t": "F#3",
-      "g": "G3",
-      "y": "G#3",
-      "h": "A3",
-      "u": "A#3",
-      "j": "B3"
-    }
+    // const qwertyNoteMap = {
+    //   "a": "C3",
+    //   "w": "C#3",
+    //   "s": "D3",
+    //   "e": "D#3",
+    //   "d": "E3",
+    //   "f": "F3",
+    //   "t": "F#3",
+    //   "g": "G3",
+    //   "y": "G#3",
+    //   "h": "A3",
+    //   "u": "A#3",
+    //   "j": "B3"
+    // }
 
     const playNote = async (note)=> {
         await setNotes([{name: note}]);
@@ -55,7 +55,11 @@ function Synth(){
     }
 
     const handleKeyDown =(event)=>{
-        playNote(qwertyNoteMap[event.key])
+        let noteObject = [...blackKeys, ...whiteKeys].find((noteObj)=>{
+            return noteObj.qwerty === event.key
+        })
+        playNote(noteObject.note)
+        // playNote(qwertyNoteMap[event.key])
     }
 
     const handleKeyUp =()=>{
