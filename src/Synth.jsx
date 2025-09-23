@@ -3,20 +3,30 @@ import { Song, Track, Instrument, Effect} from 'reactronica';
 
 function Synth(){
     /**
-     * TODO: contorlt he following with useState
+     * TODO: contorl the following with useState
      * wavetype/synth type select dropdowns amSynth | duoSynth | fmSynth | membraneSynth | metalSynth | monoSynth | pluckSynth | synth
      * controls to set envelope ADSR object 
-     * dropdown to select octave  and set with stateVariable "1" through "7"
+     * dropdown to select octave and set state variable with strings, options "1" through "7"
      * polyphony state variable
-     * for loop on useState array to add effects  e.g. [{type: "distortion", wet: .50 }]}
+     * Add html to modify effect state
      */
     // 
     const divRef = useRef(null);
+    const [synthType, setSynthType] = useState("duoSynth");
     const [waveType, setWaveType] = useState("square");
+    const [effects, setEffects] = useState(
+        [
+            {
+                type: "distortion",
+                wet: .50
+            }
+        ]
+    )
+    const [octave, setOctave] = useState("3");
     const [notes, setNotes] = useState(null);
     const [playing, setPlaying] = useState(false);
-    const [synthType, setSynthType] = useState("duoSynth");
-    const [octave, setOctave] = useState("3")
+
+
     
     
     const [envelope, setEnvelope] = useState(
@@ -66,8 +76,21 @@ function Synth(){
         stopNote();
     }
 
+    const handleAddEffect = (effect, wet)=>{
+        myEffects = [...effects]
+        myEffects.push({type: effect, wet: wet})
+        setEffects(myEffects)
+    }
+
+    const handleRemoveEffect =(effect)=>{
+        setEffects(effects.filter((effectToRemove)=>{
+            return effect !== effectToRemove.type
+        }))
+    }
+
     const blackKeysHTML = []
     const whiteKeysHTML = []
+    const effectsHTML = []
 
     const blackKeys = [
         { note:`C#${octave}`, qwerty:"w", label: "C#" },
@@ -112,6 +135,13 @@ function Synth(){
         whiteKeysHTML.push(whiteKey)
     }
 
+    for (let i=0; i<effects.length; i++){
+        effectsHTML.push(<Effect key={i} type={effects[i].type} wet={effects[i].wet}/>)
+    }
+
+
+
+
     useEffect(() => {
         divRef.current.focus();
     }, []);
@@ -138,7 +168,9 @@ function Synth(){
                             }} 
                             envelope = {envelope}
                         />
-                        <Effect type="distortion" wet={.50}/>
+                        {effectsHTML.map(effect=>{
+                            return effect
+                        })}
                     </Track>
                 </Song>
             </div>
