@@ -3,12 +3,13 @@ import { Song, Track, Instrument, Effect} from 'reactronica';
 
 function Synth(){
     // synth with piano roll
-    // to do: menus to set: synth type, envelope, 
+    // to do: UI inputs to set: synth type, envelope, oscillator wave type, polyphony
     const divRef = useRef(null);
     const [waveType, setWaveType] = useState("square");
     const [notes, setNotes] = useState(null);
     const [playing, setPlaying] = useState(false);
     const [synthType, setSynthType] = useState("duoSynth");
+    const [octave, setOctave] = useState("3")
     // amSynth | duoSynth | fmSynth | membraneSynth | metalSynth | monoSynth | pluckSynth | synth
     
     const [envelope, setEnvelope] = useState(
@@ -21,41 +22,85 @@ function Synth(){
         }
     )
 
-    const keyNoteMap = {
+    const qwertyNoteMap = {
       "a": "C3",
       "w": "C#3",
       "s": "D3",
       "e": "D#3",
       "d": "E3",
-      'f': "F3",
+      "f": "F3",
       "t": "F#3",
-      'g': "G3",
+      "g": "G3",
       "y": "G#3",
-      'h': "A3",
-      'u': "A#3",
-      'j': "B3"
+      "h": "A3",
+      "u": "A#3",
+      "j": "B3"
     }
 
-    const playNote =(note)=> {
-        setNotes([{name: note}]);
-        setPlaying(true);
+    const playNote = async (note)=> {
+        await setNotes([{name: note}]);
+        await setPlaying(true);
     }
 
-    const stopNote =()=> {
-        setNotes(null);
-        setPlaying(false);
+    const stopNote = async ()=> {
+        await setNotes(null);
+        await setPlaying(false);
     }
 
     const handleKeyDown =(event)=>{
-        playNote(keyNoteMap[event.key])
-        console.log(event.key + ' down')
+        playNote(qwertyNoteMap[event.key])
     }
 
-    const handleKeyUp =(event)=>{
+    const handleKeyUp =()=>{
         stopNote();
-        console.log(event.key + ' up')
     }
-  
+
+    const blackKeysHTML = []
+    const whiteKeysHTML = []
+
+    const blackKeys = [
+        { note:`C#${octave}`, qwerty:"w", label: "C#" },
+        { note:`D#${octave}`, qwerty:"e", label: "D#" },
+        { note:`F#${octave}`, qwerty:"t", label: "F#" },
+        { note:`G#${octave}`, qwerty:"y", label: "G#" },
+        { note:`A#${octave}`, qwerty:"u", label: "A#" }
+    ]
+    const whiteKeys = [
+        { note:`C${octave}`, qwerty:"a", label: "C" },
+        { note:`D${octave}`, qwerty:"s", label: "D" },
+        { note:`E${octave}`, qwerty:"d", label: "E" },
+        { note:`F${octave}`, qwerty:"f", label: "F" },
+        { note:`G${octave}`, qwerty:"g", label: "G" },
+        { note:`A${octave}`, qwerty:"h", label: "A" },
+        { note:`B${octave}`, qwerty:"j", label: "B" }
+    ]
+
+    for (let i=0; i<blackKeys.length; i++){
+        const note = blackKeys[i];
+        const qwerty = blackKeys[i].qwerty;
+        const blackKey = <div key={i} 
+                className="piano-key-black"
+                onMouseDown={()=> playNote(note.note) } 
+                onMouseUp={()=> stopNote() }>
+                    <p>{ note.label  }</p>
+                    <p>{ qwerty }</p>
+                </div>
+        blackKeysHTML.push(blackKey)
+    }
+
+    for (let i=0; i<whiteKeys.length; i++){
+        const note = whiteKeys[i];
+        const qwerty = whiteKeys[i].qwerty;
+        const whiteKey = <div key={i}
+                className="piano-key-white" 
+                onMouseDown={()=> {playNote(note.note)}} 
+                onMouseUp={()=> stopNote() }>
+                    <p>{ note.label }</p>
+                    <p>{ qwerty }</p>
+                </div>
+        whiteKeysHTML.push(whiteKey)
+    }
+
     useEffect(() => {
         divRef.current.focus();
     }, []);
@@ -65,20 +110,10 @@ function Synth(){
             <div className="big-box" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
                 <div className="piano-keys-container">
                     <div className="piano-keys-row-black">
-                        <div className="piano-key-black"> <p>C#</p> <p>w</p> </div>
-                        <div className="piano-key-black"> <p>D#</p> <p>e</p> </div>
-                        <div className="piano-key-black"> <p>F#</p> <p>t</p> </div>
-                        <div className="piano-key-black"> <p>G#</p> <p>y</p> </div>
-                        <div className="piano-key-black"> <p>A#</p> <p>u</p> </div>
+                        {blackKeysHTML.map( ( key )=> {return key})}
                     </div>
                     <div className="piano-keys-row-white">
-                        <div className="piano-key-white"> <p>C</p> <p>a</p> </div>
-                        <div className="piano-key-white"> <p>D</p> <p>s</p> </div>
-                        <div className="piano-key-white"> <p>E</p> <p>d</p> </div>
-                        <div className="piano-key-white"> <p>F/E#</p> <p>f</p> </div>
-                        <div className="piano-key-white"> <p>G</p> <p>g</p> </div>
-                        <div className="piano-key-white"> <p>A</p> <p>h</p> </div>
-                        <div className="piano-key-white"> <p>B</p> <p>j</p> </div>
+                        {whiteKeysHTML.map( ( key ) =>{ return key})}
                     </div>
                 </div>
 
