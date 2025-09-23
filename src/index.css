@@ -10,8 +10,8 @@ html, body{
     padding: 0;
 }
 .big-box {
-    width: 500px;
-    height: 500px
+    width: 100vw;
+    height: 100vh;
 }
 
 .drum-pad-container {
@@ -26,8 +26,8 @@ html, body{
 .piano-keys-container {
     display: grid;
     grid-template-rows: auto auto;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     gap: 1%;
 }
 
@@ -36,15 +36,16 @@ html, body{
     grid-template-columns: auto auto auto auto auto auto auto;
     height: 100%;
     width: 100%;
-    gap: 1%;
+    gap: 0%;
 }
 
 .piano-keys-row-black {
+    position: relative;
     display: grid;
     grid-template-columns: auto auto auto auto auto;
     height: 80%;
     width: 100%;
-    gap: 1%;
+    gap: 0%;
 }
 
 
@@ -52,12 +53,15 @@ html, body{
 .piano-key-white {
     border-style: solid;
     text-align: center;
-    width: 50%;
+    width: 70%;
     height: 100%;
     border-style: solid;
+    margin: 0;
 }
 
 .piano-key-black {
+    position: relative;
+    left: 30%;
     color: white;
     background-color: black;
     border-style: solid;
@@ -65,6 +69,7 @@ html, body{
     width: 30%;
     height: 100%;
     border-style: solid;
+    margin:0;
 }
 
 .piano-key-white:active {

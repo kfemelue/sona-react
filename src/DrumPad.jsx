@@ -2,6 +2,10 @@ import { useRef, useState, useEffect } from 'react';
 import { Song, Track, Instrument, Effect } from 'reactronica';
 
 function DrumPad(props) {
+  /**
+   * TODO:
+   * refactor pad button rendering with loops
+   */
   const divRef = useRef(null);
   const [notes, setNotes] = useState(null);
   const [playing, setPlaying] = useState(false);

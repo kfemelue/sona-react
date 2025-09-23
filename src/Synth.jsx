@@ -2,15 +2,22 @@ import { useRef, useState, useEffect } from 'react';
 import { Song, Track, Instrument, Effect} from 'reactronica';
 
 function Synth(){
-    // synth with piano roll
-    // to do: UI inputs to set: synth type, envelope, oscillator wave type, polyphony
+    /**
+     * TODO: contorlt he following with useState
+     * wavetype/synth type select dropdowns amSynth | duoSynth | fmSynth | membraneSynth | metalSynth | monoSynth | pluckSynth | synth
+     * controls to set envelope ADSR object 
+     * dropdown to select octave  and set with stateVariable "1" through "7"
+     * polyphony state variable
+     * for loop on useState array to add effects  e.g. [{type: "distortion", wet: .50 }]}
+     */
+    // 
     const divRef = useRef(null);
     const [waveType, setWaveType] = useState("square");
     const [notes, setNotes] = useState(null);
     const [playing, setPlaying] = useState(false);
     const [synthType, setSynthType] = useState("duoSynth");
     const [octave, setOctave] = useState("3")
-    // amSynth | duoSynth | fmSynth | membraneSynth | metalSynth | monoSynth | pluckSynth | synth
+    
     
     const [envelope, setEnvelope] = useState(
         {
