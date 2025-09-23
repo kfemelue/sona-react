@@ -4,11 +4,13 @@ import { Song, Track, Instrument, Effect} from 'reactronica';
 function Synth(){
     /**
      * TODO: contorl the following with useState
-     * wavetype/synth type select dropdowns amSynth | duoSynth | fmSynth | membraneSynth | metalSynth | monoSynth | pluckSynth | synth
-     * controls to set envelope ADSR object 
-     * dropdown to select octave and set state variable with strings, options "1" through "7"
-     * polyphony state variable
-     * Add html to modify effect state
+     * control Wave and Synth types with select 
+     *         synth types: amSynth | duoSynth | fmSynth | membraneSynth | metalSynth | monoSynth | pluckSynth | synth
+     *         wave types: square, sine, saw, etc
+     * Add Controls to set envelope ADSR object 
+     * Add dropdown to select octave and set octave state variable with strings, options "1" through "7"
+     * Add a polyphony state variable and html to control it
+     * Add html to add and remove effects and modify the dry/wet mix of the effect
      */
     // 
     const divRef = useRef(null);
