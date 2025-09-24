@@ -179,14 +179,14 @@ function Synth(){
     return (
         <div>
             <div className="big-box" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
-                <div id="select-container">
+                {/* <div id="select-container">
                     <label htmlFor="wavetype">Set Wavetype: </label>
                     <select name="wavetype" onChange={(event)=>{handleSelectWave(event.target.value)}}>
                         <optgroup label="Choose a Type of oscillator wave">
                             {selectWaveHTML.map(opt => opt)}
                         </optgroup>
                     </select>
-                </div>
+                </div> */}
 
                 <div id="select-container">
                     <label htmlFor="synthtype">Set Synth Type: </label>
