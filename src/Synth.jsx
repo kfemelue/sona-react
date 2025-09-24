@@ -3,14 +3,12 @@ import { Song, Track, Instrument, Effect} from 'reactronica';
 
 function Synth(){
     /**
-     * TODO: contorl the following with useState
-     * control Wave and Synth types with select 
-     *         synth types: amSynth | duoSynth | fmSynth | membraneSynth | metalSynth | monoSynth | pluckSynth | synth
-     *         wave types: square, sine, saw, etc
+     * TODO: control the following with useState
+     * Add menu to choose an octave and set octave state variable with strings, options "1" through "5"
      * Add Controls to set envelope ADSR object 
-     * Add dropdown to select octave and set octave state variable with strings, options "1" through "7"
-     * Add a polyphony state variable and html to control it
-     * Add html to add and remove effects and modify the dry/wet mix of the effect
+     * Add html to toggle effects and modify the dry/wet mix of the effect
+     * Add styling to control select menus for wave type and synth type
+     * --- streth: Add a polyphony state variable and html to control it
      */
     // 
     const divRef = useRef(null);
@@ -20,12 +18,16 @@ function Synth(){
         [
             {
                 type: "distortion",
-                wet: .50
+                wet: .50,
+                on: true
             }
         ]
     )
     const [octave, setOctave] = useState("3");
     const [notes, setNotes] = useState(null);
+
+
+    // can pass playing to synth component as prop if multiple instrument components on same page
     const [playing, setPlaying] = useState(false);
 
 
@@ -55,6 +57,9 @@ function Synth(){
     //   "u": "A#3",
     //   "j": "B3"
     // }
+
+    const waveTypes = ["sine", "square", "triangle", "sawtooth"];
+    const synthTypes = ["amSynth", "duoSynth", "fmSynth", "monoSynth" , "pluckSynth" , "synth"];
 
     const playNote = async (note)=> {
         await setNotes([{name: note}]);
@@ -90,9 +95,21 @@ function Synth(){
         }))
     }
 
+    const handleSelectWave = (wave) => {
+        setWaveType(wave);
+        console.log(wave)
+    }
+
+    const handleSelectSynth = (synth) => {
+        setSynthType(synth);
+        console.log(synth)
+    }
+
     const blackKeysHTML = []
     const whiteKeysHTML = []
     const effectsHTML = []
+    const selectWaveHTML = []
+    const selectSynthHTML = []
 
     const blackKeys = [
         { note:`C#${octave}`, qwerty:"w", label: "C#" },
@@ -138,8 +155,19 @@ function Synth(){
     }
 
     for (let i=0; i<effects.length; i++){
-        effectsHTML.push(<Effect key={i} type={effects[i].type} wet={effects[i].wet}/>)
+        if (effects[i].on){
+            effectsHTML.push(<Effect key={i} type={effects[i].type} wet={effects[i].wet}/>)
+        }
     }
+
+    for(let i=0; i<waveTypes.length ; i++){
+        selectWaveHTML.push(<option key={i} value={waveTypes[i]}>{waveTypes[i]}</option>)
+    }
+
+    for(let i=0; i<synthTypes.length ; i++){
+        selectSynthHTML.push(<option key={i} value={synthTypes[i]}>{synthTypes[i]}</option>)
+    }
+
 
 
 
@@ -151,6 +179,24 @@ function Synth(){
     return (
         <div>
             <div className="big-box" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
+                <div id="select-container">
+                    <label htmlFor="wavetype">Set Wavetype: </label>
+                    <select name="wavetype" onChange={(event)=>{handleSelectWave(event.target.value)}}>
+                        <optgroup label="Choose a Type of oscillator wave">
+                            {selectWaveHTML.map(opt => opt)}
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div id="select-container">
+                    <label htmlFor="synthtype">Set Synth Type: </label>
+                    <select name="synthtype" onChange={(event)=>{handleSelectSynth(event.target.value)}}>
+                        <optgroup label="Choose a Type of oscillator wave">
+                            {selectSynthHTML.map(opt => opt)}
+                        </optgroup>
+                    </select>
+                </div>
+                
                 <div className="piano-keys-container">
                     <div className="piano-keys-row-black">
                         {blackKeysHTML.map( ( key )=> {return key})}
