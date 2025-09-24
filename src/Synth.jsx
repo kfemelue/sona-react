@@ -4,9 +4,13 @@ import { Song, Track, Instrument, Effect} from 'reactronica';
 function Synth(){
     /**
      * TODO: control the following with useState
+     * 
+     * Add html to toggle effects and modify the dry/wet mix of the effect
+     *          - modify this:
+     *              - Select effects from a menu to add
+     *              - conserve ordering of added effects by sorting effects array by id numbers
      * Add menu to choose an octave and set octave state variable with strings, options "1" through "5"
      * Add Controls to set envelope ADSR object 
-     * Add html to toggle effects and modify the dry/wet mix of the effect
      * Add styling to control select menus for wave type and synth type
      * --- streth: Add a polyphony state variable and html to control it
      */
@@ -18,21 +22,20 @@ function Synth(){
         [
             {
                 type: "distortion",
-                wet: .50,
-                on: true
+                wet: .50
+            },
+            {
+                type: "feedbackDelay",
+                wet: .30
             }
         ]
-    )
+    );
     const [octave, setOctave] = useState("3");
     const [notes, setNotes] = useState(null);
-
 
     // can pass playing to synth component as prop if multiple instrument components on same page
     const [playing, setPlaying] = useState(false);
 
-
-    
-    
     const [envelope, setEnvelope] = useState(
         {
             //use seconds as units i.e. 0.015 is 15 ms
@@ -41,7 +44,7 @@ function Synth(){
             sustain: .015,
             release: .400
         }
-    )
+    );
 
     // const qwertyNoteMap = {
     //   "a": "C3",
@@ -64,52 +67,66 @@ function Synth(){
     const playNote = async (note)=> {
         await setNotes([{name: note}]);
         await setPlaying(true);
-    }
+    };
 
     const stopNote = async ()=> {
         await setNotes(null);
         await setPlaying(false);
-    }
+    };
 
     const handleKeyDown =(event)=>{
         let noteObject = [...blackKeys, ...whiteKeys].find((noteObj)=>{
-            return noteObj.qwerty === event.key
-        })
-        playNote(noteObject.note)
+            return noteObj.qwerty === event.key;
+        });
+        playNote(noteObject.note);
         // playNote(qwertyNoteMap[event.key])
-    }
+    };
 
     const handleKeyUp =()=>{
         stopNote();
-    }
+    };
 
-    const handleAddEffect = (effect, wet)=>{
-        myEffects = [...effects]
-        myEffects.push({type: effect, wet: wet})
-        setEffects(myEffects)
-    }
+    const handleRemoveEffect = (effect) => {
+        let oldEffects = [...effects];
+        let filteredEffects = oldEffects.filter( effectToRemove =>{
+            return effectToRemove.type != effect
+        });
+        setEffects(filteredEffects);
+    };
 
-    const handleRemoveEffect =(effect)=>{
-        setEffects(effects.filter((effectToRemove)=>{
-            return effect !== effectToRemove.type
-        }))
-    }
+    const handleAddEffect = (effect, wet)=> {
+        // remove effect every time, and replace it with the same effect, new wet value
+        // consider adding ids to effects to conserve ordering in signal chain
+        // implement remove by ID
+        //indexOf
+
+        let oldEffects = [...effects];
+        let filteredEffects = oldEffects.filter( effectToRemove =>{
+            return effectToRemove.type != effect
+        })
+
+        let newEffect = { type: effect, wet: wet }
+        setEffects([...filteredEffects, newEffect]);
+    };
 
     const handleSelectWave = (wave) => {
         setWaveType(wave);
-        console.log(wave)
-    }
+    };
 
     const handleSelectSynth = (synth) => {
         setSynthType(synth);
-        console.log(synth)
+    };
+
+    const convertStringToDecimal = (stringNumber)=>{
+        return (Number(stringNumber)/100)
     }
 
-    const blackKeysHTML = []
-    const whiteKeysHTML = []
-    const effectsHTML = []
-    const selectWaveHTML = []
-    const selectSynthHTML = []
+    const blackKeysHTML = [];
+    const whiteKeysHTML = [];
+    const effectsHTML = [] // effects do not appear on page, but are added to output song as children;
+    const effectSlidersHTML = [];
+    const selectWaveHTML = [];
+    const selectSynthHTML = [];
 
     const blackKeys = [
         { note:`C#${octave}`, qwerty:"w", label: "C#" },
@@ -117,7 +134,7 @@ function Synth(){
         { note:`F#${octave}`, qwerty:"t", label: "F#" },
         { note:`G#${octave}`, qwerty:"y", label: "G#" },
         { note:`A#${octave}`, qwerty:"u", label: "A#" }
-    ]
+    ];
     const whiteKeys = [
         { note:`C${octave}`, qwerty:"a", label: "C" },
         { note:`D${octave}`, qwerty:"s", label: "D" },
@@ -126,50 +143,59 @@ function Synth(){
         { note:`G${octave}`, qwerty:"g", label: "G" },
         { note:`A${octave}`, qwerty:"h", label: "A" },
         { note:`B${octave}`, qwerty:"j", label: "B" }
-    ]
+    ];
 
     for (let i=0; i<blackKeys.length; i++){
         const note = blackKeys[i];
         const qwerty = blackKeys[i].qwerty;
         const blackKey = <div key={i} 
                 className="piano-key-black"
-                onMouseDown={()=> playNote(note.note) } 
-                onMouseUp={()=> stopNote() }>
+                onMouseDown={() => playNote(note.note) } 
+                onMouseUp={() => stopNote() }>
                     <p>{ note.label  }</p>
                     <p>{ qwerty }</p>
-                </div>
-        blackKeysHTML.push(blackKey)
-    }
+                </div>;
+        blackKeysHTML.push(blackKey);
+    };
 
     for (let i=0; i<whiteKeys.length; i++){
         const note = whiteKeys[i];
         const qwerty = whiteKeys[i].qwerty;
         const whiteKey = <div key={i}
                 className="piano-key-white" 
-                onMouseDown={()=> {playNote(note.note)}} 
-                onMouseUp={()=> stopNote() }>
+                onMouseDown={() => {playNote(note.note)}} 
+                onMouseUp={() => stopNote()}>
                     <p>{ note.label }</p>
                     <p>{ qwerty }</p>
-                </div>
-        whiteKeysHTML.push(whiteKey)
-    }
+                </div>;
+        whiteKeysHTML.push(whiteKey);
+    };
 
     for (let i=0; i<effects.length; i++){
-        if (effects[i].on){
-            effectsHTML.push(<Effect key={i} type={effects[i].type} wet={effects[i].wet}/>)
-        }
-    }
+        effectsHTML.push(<Effect key={i} type={effects[i].type} wet={effects[i].wet}/>);
+    };
+
+    for (let i=0; i<effects.length; i++){
+        effectSlidersHTML.push(<div id="effect-slider-container">
+                <p>{effects[i].type.toUpperCase()}</p> 
+                <input type="range" min="0" max="100"
+                    onChange={(event)=>{
+                        handleAddEffect(effects[i].type, convertStringToDecimal(event.target.value) ) 
+                    }}
+                />
+                <button onClick={()=>{handleRemoveEffect(effects[i].type)}}>Remove Effect</button>
+            </div>);
+    };
+
+
 
     for(let i=0; i<waveTypes.length ; i++){
-        selectWaveHTML.push(<option key={i} value={waveTypes[i]}>{waveTypes[i]}</option>)
-    }
+        selectWaveHTML.push(<option key={i} value={waveTypes[i]}>{waveTypes[i]}</option>);
+    };
 
     for(let i=0; i<synthTypes.length ; i++){
-        selectSynthHTML.push(<option key={i} value={synthTypes[i]}>{synthTypes[i]}</option>)
-    }
-
-
-
+        selectSynthHTML.push(<option key={i} value={synthTypes[i]}>{synthTypes[i]}</option>);
+    };
 
 
     useEffect(() => {
@@ -179,7 +205,7 @@ function Synth(){
     return (
         <div>
             <div className="big-box" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
-                {/* <div id="select-container">
+                {/* <div class="select-container">
                     <label htmlFor="wavetype">Set Wavetype: </label>
                     <select name="wavetype" onChange={(event)=>{handleSelectWave(event.target.value)}}>
                         <optgroup label="Choose a Type of oscillator wave">
@@ -188,13 +214,17 @@ function Synth(){
                     </select>
                 </div> */}
 
-                <div id="select-container">
+                <div class="select-container">
                     <label htmlFor="synthtype">Set Synth Type: </label>
                     <select name="synthtype" onChange={(event)=>{handleSelectSynth(event.target.value)}}>
                         <optgroup label="Choose a Type of oscillator wave">
                             {selectSynthHTML.map(opt => opt)}
                         </optgroup>
                     </select>
+                </div>
+
+                <div class="effects">
+                    {effectSlidersHTML.map(slider=>slider)}
                 </div>
                 
                 <div className="piano-keys-container">
@@ -217,7 +247,7 @@ function Synth(){
                             envelope = {envelope}
                         />
                         {effectsHTML.map(effect=>{
-                            return effect
+                            return effect;
                         })}
                     </Track>
                 </Song>
