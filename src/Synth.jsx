@@ -27,7 +27,7 @@ function Synth(){
             },
             {
                 type: "feedbackDelay",
-                wet: .30
+                wet: .10
             }
         ]
     );
