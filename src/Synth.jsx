@@ -9,6 +9,7 @@ function Synth(){
      *          - modify this:
      *              - Select effects from a menu to add
      *              - conserve ordering of added effects by sorting effects array by id numbers
+     *              - use form  with onChange for Effects and filters
      * Add menu to choose an octave and set octave state variable with strings, options "1" through "5"
      * Add Controls to set envelope ADSR object 
      * Add styling to control select menus for wave type and synth type
@@ -175,17 +176,17 @@ function Synth(){
         effectsHTML.push(<Effect key={i} type={effects[i].type} wet={effects[i].wet}/>);
     };
 
-    for (let i=0; i<effects.length; i++){
-        effectSlidersHTML.push(<div id="effect-slider-container">
-                <p>{effects[i].type.toUpperCase()}</p> 
-                <input type="range" min="0" max="100"
-                    onChange={(event)=>{
-                        handleAddEffect(effects[i].type, convertStringToDecimal(event.target.value) ) 
-                    }}
-                />
-                <button onClick={()=>{handleRemoveEffect(effects[i].type)}}>Remove Effect</button>
-            </div>);
-    };
+    // for (let i=0; i<effects.length; i++){
+    //     effectSlidersHTML.push(<div id="effect-slider-container">
+    //             <label htmlFor={effects[i].type.toUpperCase()}>{effects[i].type.toUpperCase()} Wet/Dry Mix</label>
+    //             <input name={effects[i].type.toUpperCase()} type="range" min="0" max="100"
+    //                 onChange={(event)=>{
+    //                     handleAddEffect(effects[i].type, convertStringToDecimal(event.target.value) ) 
+    //                 }}
+    //             />
+    //             <button onClick={()=>{handleRemoveEffect(effects[i].type)}}>Remove Effect</button>
+    //         </div>);
+    // };
 
 
 
