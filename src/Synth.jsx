@@ -8,8 +8,6 @@ function Synth(){
      * Add styling to control select menus for wave type and synth type
      * Add a Filter Envelope and add a polyphony state variable and html to control it
      */
-    // 
-
     // const qwertyNoteMap = {
     //   "a": "C3",
     //   "w": "C#3",
@@ -84,7 +82,7 @@ function Synth(){
     const handleOctaveUp =()=>{
         let newOctave = octave;
         if (octave < 9){
-            newOctave+=1
+            newOctave+=1;
         };
         setOctave(newOctave)
     }
@@ -92,7 +90,7 @@ function Synth(){
     const handleOctaveDown =()=>{
         let newOctave = octave;
         if (octave > 1){
-            newOctave-=1
+            newOctave-=1;
         };
         setOctave(newOctave)
     }
@@ -129,8 +127,8 @@ function Synth(){
 
     const blackKeysHTML = [];
     const whiteKeysHTML = [];
-    const effectsHTML = [] // effects do not appear on page, but are added to output song as children;
-    const effectSlidersHTML = [];
+    const effectsHTML = [] // effects do not appear on page, but are added to Tracks as children;
+    const effectSlidersHTML = [] // visible on page;
     const selectWaveHTML = [];
     const selectSynthHTML = [];
 
@@ -169,8 +167,8 @@ function Synth(){
         const qwerty = whiteKeys[i].qwerty;
         const whiteKey = <div key={i}
                 className="piano-key-white" 
-                onMouseDown={() => {playNote(note.note)}} 
-                onMouseUp={() => stopNote()}>
+                onMouseDown={() => { playNote(note.note) }} 
+                onMouseUp={() => stopNote() }>
                     <p>{ note.label }</p>
                     <p>{ qwerty }</p>
                 </div>;

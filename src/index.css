@@ -29,6 +29,7 @@ html, body{
     height: 100%;
     width: 100%;
     gap: 1%;
+    row-gap: 0;
 }
 
 .piano-keys-row-white{
@@ -37,18 +38,20 @@ html, body{
     height: 100%;
     width: 100%;
     gap: 0%;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .piano-keys-row-black {
     position: relative;
     display: grid;
     grid-template-columns: auto auto auto auto auto;
-    height: 80%;
+    height: 100%;
     width: 100%;
     gap: 0%;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
-
-
 
 .piano-key-white {
     border-style: solid;
@@ -113,6 +116,7 @@ html, body{
     grid-template-columns: auto auto auto auto auto auto auto auto auto auto;
     gap: 0%
 }
+
 .select-octave {
     background-color: aqua;
     text-align: center;
