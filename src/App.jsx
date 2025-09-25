@@ -7,6 +7,7 @@ import Synth from './Synth'
 function App() {
 
   return (
+    //pass config pros to components
     <div>
       {/* <DrumPad /> */}
       <Synth />

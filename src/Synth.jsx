@@ -188,8 +188,8 @@ function Synth(){
                         <input name="wet" type="range" min="0" max="100" onChange={ (event)=>{ handleEditEffect(effects[i], convertStringToDecimal(event.target.value) ) } } />
                             { 
                                 effects[i].on ? 
-                                <button onClick={ () => { handleEffectToggle(effects[i])}}> Turn  {effects[i].type.toLocaleUpperCase()} Off</button> : 
-                                <button onClick={ () => { handleEffectToggle(effects[i])}}> Turn  {effects[i].type.toLocaleUpperCase()} Effect On </button>
+                                <button onClick={ () => { handleEffectToggle(effects[i])}}>Off</button> : 
+                                <button onClick={ () => { handleEffectToggle(effects[i])}}>On</button>
                             }
                     </div>
                     </div>
