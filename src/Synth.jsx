@@ -11,6 +11,22 @@ function Synth(){
      *  - Add a Filter Envelope and add a polyphony state variable and html to control it
      */
     // 
+
+    // const qwertyNoteMap = {
+    //   "a": "C3",
+    //   "w": "C#3",
+    //   "s": "D3",
+    //   "e": "D#3",
+    //   "d": "E3",
+    //   "f": "F3",
+    //   "t": "F#3",
+    //   "g": "G3",
+    //   "y": "G#3",
+    //   "h": "A3",
+    //   "u": "A#3",
+    //   "j": "B3"
+    // }
+
     const divRef = useRef(null);
     const [synthType, setSynthType] = useState("duoSynth");
     const [waveType, setWaveType] = useState("square");
@@ -29,12 +45,9 @@ function Synth(){
         ]
     );
 
-    const [octave, setOctave] = useState("3");
+    const [octave, setOctave] = useState(3);
     const [notes, setNotes] = useState(null);
-
-    // can pass playing to synth component as prop if multiple instrument components on same page
     const [playing, setPlaying] = useState(false);
-
     const [envelope, setEnvelope] = useState(
         {
             // use seconds as units i.e. 0.015 is 15 ms
@@ -44,21 +57,6 @@ function Synth(){
             release: .400
         }
     );
-
-    // const qwertyNoteMap = {
-    //   "a": "C3",
-    //   "w": "C#3",
-    //   "s": "D3",
-    //   "e": "D#3",
-    //   "d": "E3",
-    //   "f": "F3",
-    //   "t": "F#3",
-    //   "g": "G3",
-    //   "y": "G#3",
-    //   "h": "A3",
-    //   "u": "A#3",
-    //   "j": "B3"
-    // }
 
     const waveTypes = ["sine", "square", "triangle", "sawtooth"];
     const synthTypes = ["duoSynth","amSynth", "fmSynth", "monoSynth" , "pluckSynth" , "synth"];
@@ -84,6 +82,22 @@ function Synth(){
     const handleKeyUp =()=>{
         stopNote();
     };
+
+    const handleOctaveUp =()=>{
+        let newOctave = octave;
+        if (octave < 9){
+            newOctave+=1
+        };
+        setOctave(newOctave)
+    }
+
+    const handleOctaveDown =()=>{
+        let newOctave = octave;
+        if (octave > 1){
+            newOctave-=1
+        };
+        setOctave(newOctave)
+    }
 
     const handleEffectToggle = async (effectObj) => {
         let tempEffects = [...effects];
@@ -194,7 +208,6 @@ function Synth(){
         selectSynthHTML.push(<option key={i} value={synthTypes[i]}>{synthTypes[i]}</option>);
     };
 
-
     useEffect(() => {
         divRef.current.focus();
     }, []);
@@ -212,7 +225,7 @@ function Synth(){
                 </div> */}
 
 
-                <div className="select-container">
+                <div className="select-synth-container">
                     <label htmlFor="synthtype">Set Synth Type: </label>
                     <select name="synthtype" onChange={(event)=>{handleSelectSynth(event.target.value)}}>
                         <optgroup label="Choose a Type of oscillator wave">
@@ -220,20 +233,18 @@ function Synth(){
                         </optgroup>
                     </select>
                 </div>
-                {effectSlidersHTML.map(effectSlider=>effectSlider)}
-
-                {/* <div className="effects-container">
-                    <div className="effect-control">
-                            <label htmlFor="wet">  {effects[0].type}: </label>
-                            <input name="wet" type="range" min="0" max="100" onChange={ (event)=>{ handleEditEffect(effects[0], convertStringToDecimal(event.target.value) ) } } />
-                            { effects[0].on ? <button onClick={ () => { handleEffectToggle(effects[0]) }}> Turn Effect Off</button> : <button onClick={ () => { handleEffectToggle(effects[0]) }}> Turn Effect On </button>}
-                    </div>
-                </div> */}
-
-                {/* <div className="effects">
-                    {effectSlidersHTML.map(slider=>slider)}
-                </div> */}
+                <div className="effect-sliders-container">
+                    {effectSlidersHTML.map(effectSlider=>effectSlider)}
+                </div>
                 
+                <div className="select-octave-container">
+                    <div className="octave-label" ><p onClick={()=>{ handleOctaveDown() }}><i className="arrow down"></i></p></div>
+                    <div className="octave-label"><p>Octave: { octave }</p></div>
+                    <div className="octave-label"><p onClick={()=>{ handleOctaveUp() }}><i className="arrow up"></i></p></div>
+                    {/* <p onClick={()=>{ handleOctaveDown() }}><i className="arrow down"></i></p>
+                    <p onClick={()=>{ handleOctaveUp() }}><i className="arrow up"></i></p> */}
+                </div>
+            
                 <div className="piano-keys-container">
                     <div className="piano-keys-row-black">
                         {blackKeysHTML.map( ( key )=> {return key})}
