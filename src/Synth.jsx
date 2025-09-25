@@ -4,11 +4,9 @@ import { Song, Track, Instrument, Effect} from 'reactronica';
 function Synth(){
     /**
      * TODO: control the following with useState
-     * Add menu to choose an octave and set octave state variable with strings, options "1" through "5"
      * Add Controls to set envelope ADSR object 
      * Add styling to control select menus for wave type and synth type
-     * --- stretch: 
-     *  - Add a Filter Envelope and add a polyphony state variable and html to control it
+     * Add a Filter Envelope and add a polyphony state variable and html to control it
      */
     // 
 
@@ -215,15 +213,6 @@ function Synth(){
     return (
         <div>
             <div className="big-box" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
-                {/* <div class="select-container">
-                    <label htmlFor="wavetype">Set Wavetype: </label>
-                    <select name="wavetype" onChange={(event)=>{handleSelectWave(event.target.value)}}>
-                        <optgroup label="Choose a Type of oscillator wave">
-                            {selectWaveHTML.map(opt => opt)}
-                        </optgroup>
-                    </select>
-                </div> */}
-
 
                 <div className="select-synth-container">
                     <label htmlFor="synthtype">Set Synth Type: </label>
@@ -238,11 +227,9 @@ function Synth(){
                 </div>
                 
                 <div className="select-octave-container">
-                    <div className="octave-label" ><p onClick={()=>{ handleOctaveDown() }}><i className="arrow down"></i></p></div>
+                    <div className="octave-label" onClick={()=>{ handleOctaveDown() }}><p><i className="arrow down"></i></p></div>
                     <div className="octave-label"><p>Octave: { octave }</p></div>
-                    <div className="octave-label"><p onClick={()=>{ handleOctaveUp() }}><i className="arrow up"></i></p></div>
-                    {/* <p onClick={()=>{ handleOctaveDown() }}><i className="arrow down"></i></p>
-                    <p onClick={()=>{ handleOctaveUp() }}><i className="arrow up"></i></p> */}
+                    <div className="octave-label" onClick={()=>{ handleOctaveUp() }}><p><i className="arrow up"></i></p></div>
                 </div>
             
                 <div className="piano-keys-container">
