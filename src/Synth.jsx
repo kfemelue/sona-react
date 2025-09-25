@@ -4,16 +4,11 @@ import { Song, Track, Instrument, Effect} from 'reactronica';
 function Synth(){
     /**
      * TODO: control the following with useState
-     * 
-     * Add html to toggle effects and modify the dry/wet mix of the effect
-     *          - modify this:
-     *              - Select effects from a menu to add
-     *              - conserve ordering of added effects by sorting effects array by id numbers
-     *              - use form  with onChange for Effects and filters
      * Add menu to choose an octave and set octave state variable with strings, options "1" through "5"
      * Add Controls to set envelope ADSR object 
      * Add styling to control select menus for wave type and synth type
-     * --- streth: Add a polyphony state variable and html to control it
+     * --- stretch: 
+     *  - Add a Filter Envelope and add a polyphony state variable and html to control it
      */
     // 
     const divRef = useRef(null);
@@ -23,14 +18,17 @@ function Synth(){
         [
             {
                 type: "distortion",
-                wet: .50
+                wet: .50,
+                on: false
             },
             {
                 type: "feedbackDelay",
-                wet: .10
+                wet: .50,
+                on: false
             }
         ]
     );
+
     const [octave, setOctave] = useState("3");
     const [notes, setNotes] = useState(null);
 
@@ -39,7 +37,7 @@ function Synth(){
 
     const [envelope, setEnvelope] = useState(
         {
-            //use seconds as units i.e. 0.015 is 15 ms
+            // use seconds as units i.e. 0.015 is 15 ms
             attack: .030,
             decay: .015,
             sustain: .015,
@@ -63,7 +61,7 @@ function Synth(){
     // }
 
     const waveTypes = ["sine", "square", "triangle", "sawtooth"];
-    const synthTypes = ["amSynth", "duoSynth", "fmSynth", "monoSynth" , "pluckSynth" , "synth"];
+    const synthTypes = ["duoSynth","amSynth", "fmSynth", "monoSynth" , "pluckSynth" , "synth"];
 
     const playNote = async (note)=> {
         await setNotes([{name: note}]);
@@ -87,28 +85,23 @@ function Synth(){
         stopNote();
     };
 
-    const handleRemoveEffect = (effect) => {
-        let oldEffects = [...effects];
-        let filteredEffects = oldEffects.filter( effectToRemove =>{
-            return effectToRemove.type != effect
-        });
-        setEffects(filteredEffects);
-    };
+    const handleEffectToggle = async (effectObj) => {
+        let tempEffects = [...effects];
+        let index = await tempEffects.indexOf(effectObj);
+        if (tempEffects[index].on){
+            tempEffects[index].on = false;
+        } else {
+            tempEffects[index].on = true;
+        }
+        setEffects(tempEffects);
+    }
 
-    const handleAddEffect = (effect, wet)=> {
-        // remove effect every time, and replace it with the same effect, new wet value
-        // consider adding ids to effects to conserve ordering in signal chain
-        // implement remove by ID
-        //indexOf
-
-        let oldEffects = [...effects];
-        let filteredEffects = oldEffects.filter( effectToRemove =>{
-            return effectToRemove.type != effect
-        })
-
-        let newEffect = { type: effect, wet: wet }
-        setEffects([...filteredEffects, newEffect]);
-    };
+    const handleEditEffect = async (effectObj, wet)=>{
+        let tempEffects = [...effects];
+        let index = await tempEffects.indexOf(effectObj);
+        tempEffects[index].wet = wet;
+        setEffects(tempEffects);
+    }
 
     const handleSelectWave = (wave) => {
         setWaveType(wave);
@@ -173,22 +166,25 @@ function Synth(){
     };
 
     for (let i=0; i<effects.length; i++){
-        effectsHTML.push(<Effect key={i} type={effects[i].type} wet={effects[i].wet}/>);
+        if(effects[i].on===true){
+            effectsHTML.push(<Effect key={i} type={effects[i].type} wet={effects[i].wet}/>);
+        }
     };
 
-    // for (let i=0; i<effects.length; i++){
-    //     effectSlidersHTML.push(<div id="effect-slider-container">
-    //             <label htmlFor={effects[i].type.toUpperCase()}>{effects[i].type.toUpperCase()} Wet/Dry Mix</label>
-    //             <input name={effects[i].type.toUpperCase()} type="range" min="0" max="100"
-    //                 onChange={(event)=>{
-    //                     handleAddEffect(effects[i].type, convertStringToDecimal(event.target.value) ) 
-    //                 }}
-    //             />
-    //             <button onClick={()=>{handleRemoveEffect(effects[i].type)}}>Remove Effect</button>
-    //         </div>);
-    // };
-
-
+    for (let i=0; i<effects.length; i++){
+        let html = <div key={i} className="effects-container">
+                    <div className="effect-control">
+                        <label htmlFor="wet">  {effects[i].type.toLocaleUpperCase()}: </label>
+                        <input name="wet" type="range" min="0" max="100" onChange={ (event)=>{ handleEditEffect(effects[i], convertStringToDecimal(event.target.value) ) } } />
+                            { 
+                                effects[i].on ? 
+                                <button onClick={ () => { handleEffectToggle(effects[i])}}> Turn  {effects[i].type.toLocaleUpperCase()} Off</button> : 
+                                <button onClick={ () => { handleEffectToggle(effects[i])}}> Turn  {effects[i].type.toLocaleUpperCase()} Effect On </button>
+                            }
+                    </div>
+                    </div>
+        effectSlidersHTML.push(html)
+    }
 
     for(let i=0; i<waveTypes.length ; i++){
         selectWaveHTML.push(<option key={i} value={waveTypes[i]}>{waveTypes[i]}</option>);
@@ -215,7 +211,8 @@ function Synth(){
                     </select>
                 </div> */}
 
-                <div class="select-container">
+
+                <div className="select-container">
                     <label htmlFor="synthtype">Set Synth Type: </label>
                     <select name="synthtype" onChange={(event)=>{handleSelectSynth(event.target.value)}}>
                         <optgroup label="Choose a Type of oscillator wave">
@@ -223,10 +220,19 @@ function Synth(){
                         </optgroup>
                     </select>
                 </div>
+                {effectSlidersHTML.map(effectSlider=>effectSlider)}
 
-                <div class="effects">
+                {/* <div className="effects-container">
+                    <div className="effect-control">
+                            <label htmlFor="wet">  {effects[0].type}: </label>
+                            <input name="wet" type="range" min="0" max="100" onChange={ (event)=>{ handleEditEffect(effects[0], convertStringToDecimal(event.target.value) ) } } />
+                            { effects[0].on ? <button onClick={ () => { handleEffectToggle(effects[0]) }}> Turn Effect Off</button> : <button onClick={ () => { handleEffectToggle(effects[0]) }}> Turn Effect On </button>}
+                    </div>
+                </div> */}
+
+                {/* <div className="effects">
                     {effectSlidersHTML.map(slider=>slider)}
-                </div>
+                </div> */}
                 
                 <div className="piano-keys-container">
                     <div className="piano-keys-row-black">
