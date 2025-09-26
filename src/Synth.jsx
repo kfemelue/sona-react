@@ -1,13 +1,9 @@
 import { useRef, useState, useEffect } from 'react';
 import { Song, Track, Instrument, Effect} from 'reactronica';
+import $ from 'jquery';
+import { roundSlider } from 'round-slider';
 
 function Synth(){
-    /**
-     * TODO: control the following with useState
-     * Add Controls to set envelope ADSR object 
-     * Add styling to control select menus for wave type and synth type
-     * Add a Filter Envelope and add a polyphony state variable and html to control it
-     */
     // const qwertyNoteMap = {
     //   "a": "C3",
     //   "w": "C#3",
@@ -24,8 +20,21 @@ function Synth(){
     // }
 
     const divRef = useRef(null);
+    const [volume, setVolume] = useState(0)
     const [synthType, setSynthType] = useState("duoSynth");
     const [waveType, setWaveType] = useState("square");
+    const [octave, setOctave] = useState(3);
+    const [notes, setNotes] = useState(null);
+    const [playing, setPlaying] = useState(false);
+    const [envelope, setEnvelope] = useState(
+        {
+            // use seconds as units i.e. 0.015 is 15 ms
+            attack: .030,
+            decay: .015,
+            sustain: .015,
+            release: .400
+        }
+    );
     const [effects, setEffects] = useState(
         [
             {
@@ -40,23 +49,10 @@ function Synth(){
             }
         ]
     );
-
-    const [octave, setOctave] = useState(3);
-    const [notes, setNotes] = useState(null);
-    const [playing, setPlaying] = useState(false);
-    const [envelope, setEnvelope] = useState(
-        {
-            // use seconds as units i.e. 0.015 is 15 ms
-            attack: .030,
-            decay: .015,
-            sustain: .015,
-            release: .400
-        }
-    );
-
     const waveTypes = ["sine", "square", "triangle", "sawtooth"];
     const synthTypes = ["duoSynth","amSynth", "fmSynth", "monoSynth" , "pluckSynth" , "synth"];
-
+    const envelopeOptions = ["attack", "delay", "sustain", "release"];
+    
     const playNote = async (note)=> {
         await setNotes([{name: note}]);
         await setPlaying(true);
@@ -85,7 +81,7 @@ function Synth(){
             newOctave+=1;
         };
         setOctave(newOctave)
-    }
+    };
 
     const handleOctaveDown =()=>{
         let newOctave = octave;
@@ -93,7 +89,7 @@ function Synth(){
             newOctave-=1;
         };
         setOctave(newOctave)
-    }
+    };
 
     const handleEffectToggle = async (effectObj) => {
         let tempEffects = [...effects];
@@ -104,26 +100,33 @@ function Synth(){
             tempEffects[index].on = true;
         }
         setEffects(tempEffects);
-    }
+    };
 
     const handleEditEffect = async (effectObj, wet)=>{
         let tempEffects = [...effects];
         let index = await tempEffects.indexOf(effectObj);
         tempEffects[index].wet = wet;
         setEffects(tempEffects);
-    }
-
-    const handleSelectWave = (wave) => {
-        setWaveType(wave);
     };
+
+    const handleUpdateEnvelope = async (key, value) => {
+        let tempEnvelope = {...envelope}
+        tempEnvelope[key] = await value;
+        setEnvelope(tempEnvelope);
+    };
+
+    const handleVolumeChange = async (value) => {
+        setVolume(value);
+    };
+
 
     const handleSelectSynth = (synth) => {
         setSynthType(synth);
     };
 
     const convertStringToDecimal = (stringNumber)=>{
-        return (Number(stringNumber)/100)
-    }
+        return Number(stringNumber)
+    };
 
     const blackKeysHTML = [];
     const whiteKeysHTML = [];
@@ -131,6 +134,7 @@ function Synth(){
     const effectSlidersHTML = [] // visible on page;
     const selectWaveHTML = [];
     const selectSynthHTML = [];
+    const envelopeElementsHTML = [];
 
     const blackKeys = [
         { note:`C#${octave}`, qwerty:"w", label: "C#" },
@@ -139,6 +143,7 @@ function Synth(){
         { note:`G#${octave}`, qwerty:"y", label: "G#" },
         { note:`A#${octave}`, qwerty:"u", label: "A#" }
     ];
+
     const whiteKeys = [
         { note:`C${octave}`, qwerty:"a", label: "C" },
         { note:`D${octave}`, qwerty:"s", label: "D" },
@@ -185,7 +190,7 @@ function Synth(){
         let html = <div key={i} className="effects-container">
                     <div className="effect-control">
                         <label htmlFor="wet">  {effects[i].type.toLocaleUpperCase()}: </label>
-                        <input name="wet" type="range" min="0" max="100" onChange={ (event)=>{ handleEditEffect(effects[i], convertStringToDecimal(event.target.value) ) } } />
+                        <input name="wet" type="range" min="0" max="100" onChange={ (event)=>{ handleEditEffect(effects[i], convertStringToDecimal(event.target.value)/100 ) } } />
                             { 
                                 effects[i].on ? 
                                 <button onClick={ () => { handleEffectToggle(effects[i])}}>Off</button> : 
@@ -194,7 +199,7 @@ function Synth(){
                     </div>
                     </div>
         effectSlidersHTML.push(html)
-    }
+    };
 
     for(let i=0; i<waveTypes.length ; i++){
         selectWaveHTML.push(<option key={i} value={waveTypes[i]}>{waveTypes[i]}</option>);
@@ -204,6 +209,14 @@ function Synth(){
         selectSynthHTML.push(<option key={i} value={synthTypes[i]}>{synthTypes[i]}</option>);
     };
 
+    for( let i=0; i<envelopeOptions.length; i++){
+        envelopeElementsHTML.push(<div key={i} className="evelope-element">
+            <label htmlFor={envelopeOptions[i]}>{`${envelopeOptions[i].charAt(0).toUpperCase()}${envelopeOptions[i].slice(1)}`}</label>
+            <input type="range" min="0" max="1000" onChange={(event) => handleUpdateEnvelope(envelopeOptions[i], ( convertStringToDecimal(event.target.value) /1000 ) )} />
+            </div>
+        )
+    }
+
     useEffect(() => {
         divRef.current.focus();
     }, []);
@@ -211,7 +224,7 @@ function Synth(){
     return (
         <div>
             <div className="big-box" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
-
+                
                 <div className="select-synth-container">
                     <label htmlFor="synthtype">Set Synth Type: </label>
                     <select name="synthtype" onChange={(event)=>{handleSelectSynth(event.target.value)}}>
@@ -220,8 +233,20 @@ function Synth(){
                         </optgroup>
                     </select>
                 </div>
+                <div className="envelope-container">
+                    <div>
+                        <h6>Filter Envelope</h6>
+                    </div>
+                    {envelopeElementsHTML.map(element => element)}
+                </div>
+
                 <div className="effect-sliders-container">
+                    <div><h6>Effects</h6></div>
                     {effectSlidersHTML.map(effectSlider=>effectSlider)}
+                </div>
+                <div className="volume-container">
+                    <div><h6>Volume</h6></div>
+                    <div><input type="range" min="-100" max="100" onChange={(event)=> handleVolumeChange(convertStringToDecimal(event.target.value)/10)} /></div>
                 </div>
                 
                 <div className="select-octave-container">
@@ -240,7 +265,7 @@ function Synth(){
                 </div>
 
                 <Song isPlaying={playing}>
-                    <Track>
+                    <Track volume={volume}>
                         <Instrument 
                             notes ={notes}
                             type={synthType}
@@ -257,6 +282,6 @@ function Synth(){
             </div>
         </div>
     )
-}
+};
 
 export default Synth;

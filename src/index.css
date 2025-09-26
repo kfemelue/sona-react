@@ -155,3 +155,16 @@ html, body{
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
 }
+
+#appearance1 .rs-range-color  {
+    background-color: #5673E7;
+}
+#appearance1 .rs-path-color  {
+    background-color: #dedede;
+}
+#appearance1 .rs-handle  {
+    background-color: #000000;
+}
+#appearance1 .rs-border  {
+    border-color: white;
+}
