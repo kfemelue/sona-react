@@ -13,6 +13,7 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "reactronica": "^0.8.1-canary.0",
+    "round-slider": "^1.6.1",
     "tone": "^15.1.22"
   },
   "devDependencies": {
