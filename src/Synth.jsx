@@ -1,7 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
 import { Song, Track, Instrument, Effect} from 'reactronica';
-import $ from 'jquery';
-import { roundSlider } from 'round-slider';
 
 function Synth(){
     // const qwertyNoteMap = {
@@ -18,6 +16,8 @@ function Synth(){
     //   "u": "A#3",
     //   "j": "B3"
     // }
+
+    //tempo as a prob, and adsr as a function of tempo
 
     const divRef = useRef(null);
     const [volume, setVolume] = useState(0)
@@ -187,16 +187,14 @@ function Synth(){
     };
 
     for (let i=0; i<effects.length; i++){
-        let html = <div key={i} className="effects-container">
-                    <div className="effect-control">
+        let html = <div key={i} className="effect-control">
                         <label htmlFor="wet">  {effects[i].type.toLocaleUpperCase()}: </label>
-                        <input name="wet" type="range" min="0" max="100" onChange={ (event)=>{ handleEditEffect(effects[i], convertStringToDecimal(event.target.value)/100 ) } } />
+                        <input className="slider" name="wet" type="range" min="0" max="100" onChange={ (event)=>{ handleEditEffect(effects[i], convertStringToDecimal(event.target.value)/100 ) } } />
                             { 
                                 effects[i].on ? 
                                 <button onClick={ () => { handleEffectToggle(effects[i])}}>Off</button> : 
                                 <button onClick={ () => { handleEffectToggle(effects[i])}}>On</button>
                             }
-                    </div>
                     </div>
         effectSlidersHTML.push(html)
     };
@@ -224,31 +222,38 @@ function Synth(){
     return (
         <div>
             <div className="big-box" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
-                
-                <div className="select-synth-container">
-                    <label htmlFor="synthtype">Set Synth Type: </label>
-                    <select name="synthtype" onChange={(event)=>{handleSelectSynth(event.target.value)}}>
-                        <optgroup label="Choose a Type of oscillator wave">
-                            {selectSynthHTML.map(opt => opt)}
-                        </optgroup>
-                    </select>
-                </div>
-                <div className="envelope-container">
-                    <div>
-                        <h6>Filter Envelope</h6>
+                <div className="settings-container">
+                    <div className="select-synth-container">
+                        {/* <label htmlFor="synthtype">Synth Type: </label> */}
+                        <div>
+                            <h4>Synth Type:</h4>
+                        </div>
+                        <div>
+                            <select name="synthtype" onChange={(event)=>{handleSelectSynth(event.target.value)}}>
+                                <optgroup label="Choose a Type of oscillator wave">
+                                    {selectSynthHTML.map(opt => opt)}
+                                </optgroup>
+                            </select>
+                        </div>
+
                     </div>
-                    {envelopeElementsHTML.map(element => element)}
+                    <div className="envelope-container">
+                        <div>
+                            <h4>Filter Envelope</h4>
+                        </div>
+                        {envelopeElementsHTML.map(element => element)}
+                    </div>
+                    <div className="effect-sliders-container">
+                        <div><h4>Effects</h4></div>
+                        {effectSlidersHTML.map(effectSlider=>effectSlider)}
+                    </div>
+                    <div className="volume-container">
+                        <div><h4>Volume</h4></div>
+                        <div><input type="range" min="-100" max="100" onChange={(event)=> handleVolumeChange(convertStringToDecimal(event.target.value)/10)} /></div>
+                    </div>
+
                 </div>
 
-                <div className="effect-sliders-container">
-                    <div><h6>Effects</h6></div>
-                    {effectSlidersHTML.map(effectSlider=>effectSlider)}
-                </div>
-                <div className="volume-container">
-                    <div><h6>Volume</h6></div>
-                    <div><input type="range" min="-100" max="100" onChange={(event)=> handleVolumeChange(convertStringToDecimal(event.target.value)/10)} /></div>
-                </div>
-                
                 <div className="select-octave-container">
                     <div className="octave-label" onClick={()=>{ handleOctaveDown() }}><p><i className="arrow down"></i></p></div>
                     <div className="octave-label"><p>Octave: { octave }</p></div>
