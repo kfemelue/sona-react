@@ -51,7 +51,7 @@ function Synth(){
     );
     const waveTypes = ["sine", "square", "triangle", "sawtooth"];
     const synthTypes = ["duoSynth","amSynth", "fmSynth", "monoSynth" , "pluckSynth" , "synth"];
-    const envelopeOptions = ["attack", "delay", "sustain", "release"];
+    const envelopeOptions = ["attack", "decay", "sustain", "release"];
     
     const playNote = async (note)=> {
         await setNotes([{name: note}]);
@@ -210,7 +210,7 @@ function Synth(){
     for( let i=0; i<envelopeOptions.length; i++){
         envelopeElementsHTML.push(<div key={i} className="evelope-element">
             <label htmlFor={envelopeOptions[i]}>{`${envelopeOptions[i].charAt(0).toUpperCase()}${envelopeOptions[i].slice(1)}`}</label>
-            <input type="range" min="0" max="1000" onChange={(event) => handleUpdateEnvelope(envelopeOptions[i], ( convertStringToDecimal(event.target.value) /1000 ) )} />
+            <input type="range" min="0" max="100" onChange={(event) => handleUpdateEnvelope(envelopeOptions[i], ( convertStringToDecimal(event.target.value) /1000 ) )} />
             </div>
         )
     }
@@ -223,7 +223,7 @@ function Synth(){
         <div>
             <div className="big-box" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
                 <div className="settings-container">
-                    <div className="select-synth-container">
+                    <div className="setting">
                         {/* <label htmlFor="synthtype">Synth Type: </label> */}
                         <div>
                             <h4>Synth Type:</h4>
@@ -237,17 +237,17 @@ function Synth(){
                         </div>
 
                     </div>
-                    <div className="envelope-container">
+                    <div className="setting">
                         <div>
                             <h4>Filter Envelope</h4>
                         </div>
                         {envelopeElementsHTML.map(element => element)}
                     </div>
-                    <div className="effect-sliders-container">
+                    <div className="setting">
                         <div><h4>Effects</h4></div>
                         {effectSlidersHTML.map(effectSlider=>effectSlider)}
                     </div>
-                    <div className="volume-container">
+                    <div className="setting">
                         <div><h4>Volume</h4></div>
                         <div><input type="range" min="-100" max="100" onChange={(event)=> handleVolumeChange(convertStringToDecimal(event.target.value)/10)} /></div>
                     </div>
@@ -265,7 +265,7 @@ function Synth(){
                         {blackKeysHTML.map( ( key )=> {return key})}
                     </div>
                     <div className="piano-keys-row-white">
-                        {whiteKeysHTML.map( ( key ) =>{ return key})}
+                        {whiteKeysHTML.map( ( key ) =>{return key})}
                     </div>
                 </div>
 

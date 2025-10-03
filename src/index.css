@@ -183,4 +183,12 @@ html, body{
 .settings-container{
     display: grid;
     grid-template-columns: auto auto auto auto;
+    border-style: solid;
+}
+
+.setting {
+    border-style: solid;
+    margin: 3%;
+    padding: 3%;
+    text-align: center;
 }
