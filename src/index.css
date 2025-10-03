@@ -168,3 +168,19 @@ html, body{
 #appearance1 .rs-border  {
     border-color: white;
 }
+
+.slider:hover{
+    opacity: 1;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #04AA6D;
+  cursor: pointer;
+}
+
+.settings-container{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+}
