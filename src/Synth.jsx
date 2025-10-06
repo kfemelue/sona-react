@@ -17,7 +17,8 @@ function Synth(){
     //   "j": "B3"
     // }
     const divRef = useRef(null);
-    const [volume, setVolume] = useState(0)
+    const [volume, setVolume] = useState(0);
+    const [volumePercent, setVolumePercent] = useState(50)
     const [synthType, setSynthType] = useState("duoSynth");
     const [octave, setOctave] = useState(3);
     const [notes, setNotes] = useState(null);
@@ -83,7 +84,7 @@ function Synth(){
         if (octave > 1){
             newOctave-=1;
         };
-        setOctave(newOctave)
+        setOctave(newOctave);
     };
 
     const handleEffectToggle = async (effectObj) => {
@@ -112,6 +113,7 @@ function Synth(){
 
     const handleVolumeChange = async (value) => {
         setVolume(value);
+        setVolumePercent((value+100) /2);
     };
 
 
@@ -120,7 +122,7 @@ function Synth(){
     };
 
     const convertStringToDecimal = (stringNumber)=>{
-        return Number(stringNumber)
+        return Number(stringNumber);
     };
 
     const blackKeysHTML = [];
@@ -182,7 +184,7 @@ function Synth(){
 
     for (let i=0; i<effects.length; i++){
         let html = <div key={i} className="effect-control">
-                        <label htmlFor="wet">  {effects[i].type.toLocaleUpperCase()}: </label>
+                        <label htmlFor="wet">  {`${effects[i].type.charAt(0).toUpperCase()}${effects[i].type.slice(1)}`}</label>
                         <input className="slider" name="wet" type="range" min="0" max="100" onChange={ (event)=>{ handleEditEffect(effects[i], convertStringToDecimal(event.target.value)/100 ) } } />
                             { 
                                 effects[i].on ? 
@@ -220,7 +222,7 @@ function Synth(){
                         </div>
                         <div className="select-synth-control">
                             <select name="synthtype" onChange={(event)=>{handleSelectSynth(event.target.value)}}>
-                                <optgroup label="Choose a Type of oscillator wave">
+                                <optgroup label="Choose a Synth Type">
                                     {selectSynthHTML.map(opt => opt)}
                                 </optgroup>
                             </select>
@@ -231,23 +233,43 @@ function Synth(){
                         <div>
                             <h4>Filter Envelope</h4>
                         </div>
-                        {envelopeElementsHTML.map(element => element)}
+                        <div>
+                            {envelopeElementsHTML.map(element => element)}
+                        </div>
+                        
                     </div>
                     <div className="setting">
                         <div><h4>Effects</h4></div>
-                        {effectSlidersHTML.map(effectSlider=>effectSlider)}
+                        <div>
+                            {effectSlidersHTML.map(effectSlider=>effectSlider)}
+                        </div>
                     </div>
                     <div className="setting">
-                        <div><h4>Volume</h4></div>
-                        <div className="volume-control"><input type="range" min="-100" max="100" onChange={(event)=> handleVolumeChange(convertStringToDecimal(event.target.value)/10)} /></div>
+                        <div className="volume-control">
+                            <h4>Volume</h4>
+                            <input style={{writingMode:"vertical-lr", appearance:"slider-vertical", transform:"rotate(180deg)" }} type="range"  min="-100" max="100" onChange={(event)=> handleVolumeChange(convertStringToDecimal(event.target.value))} />
+                            <p>{volumePercent}</p>
+                        </div>
                     </div>
                 </div>
 
+
+
+
+
+
                 <div className="select-octave-container">
-                    <div className="octave-label" onClick={()=>{ handleOctaveDown() }}><p><i className="arrow down"></i></p></div>
-                    <div className="octave-label"><p>Octave: { octave }</p></div>
-                    <div className="octave-label" onClick={()=>{ handleOctaveUp() }}><p><i className="arrow up"></i></p></div>
+                    <div className="octave-label" onClick={()=>{ handleOctaveDown() }}>
+                        <p><i className="arrow down"></i></p>
+                    </div>
+                    <div className="octave-label">
+                        <p><strong>{ octave }</strong></p>
+                    </div>
+                    <div className="octave-label" onClick={()=>{ handleOctaveUp() }}>
+                        <p><i className="arrow up"></i></p>
+                    </div>
                 </div>
+
             
                 <div className="piano-keys-container">
                     <div className="piano-keys-row-black">
