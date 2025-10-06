@@ -213,7 +213,7 @@ function Synth(){
 
     return (
         <div>
-            <div className="big-box" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
+            <div className="synth" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
                 <div className="settings-container">
                     <div className="setting">
                         {/* <label htmlFor="synthtype">Synth Type: </label> */}
@@ -253,11 +253,6 @@ function Synth(){
                     </div>
                 </div>
 
-
-
-
-
-
                 <div className="select-octave-container">
                     <div className="octave-label" onClick={()=>{ handleOctaveDown() }}>
                         <p><i className="arrow down"></i></p>
@@ -269,7 +264,6 @@ function Synth(){
                         <p><i className="arrow up"></i></p>
                     </div>
                 </div>
-
             
                 <div className="piano-keys-container">
                     <div className="piano-keys-row-black">

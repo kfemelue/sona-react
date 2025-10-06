@@ -10,17 +10,23 @@ html, body{
     padding: 0;
     font-family: 'Courier New', Courier, monospace;
 }
+
 .big-box {
     width: 100vw;
     height: 100vh;
+}
+
+.synth{
+    width: 100vw;
+    height: 50vh;
 }
 
 .drum-pad-container {
     display: grid;
     grid-template-columns: auto auto auto;
     grid-template-rows: auto auto;
-    height: 100%;
-    width: 100%;
+    height: 50vh;
+    width: 100vw;
     gap: 1%;
 }
 
@@ -72,7 +78,6 @@ html, body{
     width: 30%;
     height: 100%;
     margin: 0%;
-
     position: relative;
     left: 30%;
     color: white;
@@ -82,7 +87,6 @@ html, body{
 .piano-key-white:active {
     background-color: lightcoral;
 }
-
 
 .piano-key-black:active {
     background-color: lightcoral;
@@ -114,7 +118,6 @@ html, body{
 
 .drum-pad-element:active{
     background-color: lightcoral;
-
 }
 
 .select-octave-container {
