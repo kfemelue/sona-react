@@ -51,11 +51,12 @@ function DrumPad(props) {
 
   return (
     <div>
-      <div className="drum-pad-container" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0">
+      {/* <div className="drum-pad-container" ref={divRef} onKeyDown={handleKeyDown} onKeyUp={handleKeyUp} tabIndex="0"> */}
+      <div className="drum-pad-container">
         <button className="drum-pad-element"
           onMouseDown={()=>playNote("C3")} 
           onMouseUp={()=>stopNote()}
-          onKeyDown={(event)=>handleKeyDown(event)}
+          // onKeyDown={(event)=>handleKeyDown(event)}
         >
           Kick 1
         </button>
